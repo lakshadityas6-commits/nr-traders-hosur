@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shopping Cart - NR TRADERS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Modern reset to lock all items from breaking outside their boxes */
+        * {
+            box-sizing: border-box !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            background-color: #f1f5f9; 
+            padding: 16px; 
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden; /* Stops any side-to-side scrolling page spills */
+            width: 100%;
+        }
+
+        /* Fully contained central container box */
+        .cart-wrapper-box { 
+            max-width: 550px; 
+            margin: 20px auto; 
+            padding: 24px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            width: 100%;
+            display: block;
+            clear: both;
+        }
+        
+        .back-btn { 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            color: #b38728; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 15px;
+        }
+        
+        h2 { 
+            margin-top: 0; 
+            margin-bottom: 20px;
+            color: #1e293b; 
+            font-weight: 800; 
+            font-size: 22px;
+        }
+
+        /* Policies box context wrapper */
+        .policy-panel { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            padding: 16px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            color: #334155; 
+            line-height: 1.6; 
+            width: 100%;
+        }
+
+        .min-order-alert { 
+            color: #ef4444; 
+            background: #fef2f2; 
+            border: 1px solid #fee2e2; 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            font-weight: 700; 
+            font-size: 14px; 
+            text-align: center; 
+            width: 100%;
+        }
+
+        /* Cart layout listing rows configuration */
+        .cart-item-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #f1f5f9; 
+            width: 100%;
+            font-size: 15px;
+        }
+        
+        /* Interactive client checkout fields structure */
+        .customer-form { 
+            margin-top: 30px; 
+            padding-top: 20px; 
+            border-top: 2px solid #f1f5f9; 
+            width: 100%;
+        }
+        
+        .form-title { 
+            font-size: 18px; 
+            color: #1e293b; 
+            font-weight: 700; 
+            margin-bottom: 16px; 
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            width: 100%;
+        }
+        
+        .form-group label { 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #475569; 
+        }
+        
+        /* Input elements styled securely to never widen past 100% wrapper boundaries */
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select { 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            font-size: 14px; 
+            width: 100% !important; 
+            max-width: 100% !important;
+            background: #ffffff;
+            color: #1e293b;
+        }
+        
+        .form-group textarea { 
+            resize: none; 
+            min-height: 80px; 
+        }
+        
+        /* Splitting grids setup safely for clean horizontal balance fields stack */
+        .form-grid-row { 
+            display: flex; 
+            gap: 12px; 
+            width: 100%;
+        }
+        
+        .form-grid-row .form-group {
+            flex: 1;
+        }
+        
+        .hub-finder-box { 
+            display: flex; 
+            gap: 8px; 
+            margin-top: 8px; 
+            width: 100%; 
+        }
+        
+        .finder-btn { 
+            background: #f1f5f9; 
+            color: #475569; 
+            border: 1px solid #cbd5e1; 
+            padding: 8px 10px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            border-radius: 4px; 
+            text-decoration: none; 
+            text-align: center; 
+            flex: 1;
+        }
+        
+        .finder-btn:hover { 
+            background: #e2e8f0; 
+            color: #1e293b; 
+        }
+
+        .payment-alert-box { 
+            background-color: #fffbeb; 
+            border: 1px dashed #b38728; 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin: 20px 0; 
+            color: #92400e; 
+            font-size: 13px; 
+            font-weight: 600; 
+            text-align: center; 
+            width: 100%;
+            line-height: 1.4;
+        }
+
+        .checkout-btn { 
+            background: #25D366; 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            transition: background 0.2s; 
+        }
+        
+        .checkout-btn:hover { background: #1ebd58; }
+        .checkout-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+
+        /* Mobile specific break overrides to handle ultra small viewports */
+        @media (max-width: 480px) { 
+            body { padding: 10px; }
+            .cart-wrapper-box { padding: 16px; margin: 10px auto; }
+            .form-grid-row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cart-wrapper-box">
+        <a href="index.html" class="back-btn">← Continue Shopping</a>
+        
+        <h2>🛒 Your Selection Cart</h2>
+
+        <!-- Policy Panel Display Box -->
+        <div class="policy-panel">
+            <strong>📌 ORDER & SHIPPING POLICIES:</strong><br>
+            • <strong>No COD available.</strong> Full payment confirmation required.<br>
+            • <strong>Delivery terms:</strong> Self-collection from nearest transport branch.<br>
+            • <strong>Logistics Partners:</strong> Shipped via <strong>MSS</strong> or <strong>A1 Transport</strong>.
+        </div>
+
+        <!-- Live Minimum Order Checker Box -->
+        <div id="minOrderAlert" class="min-order-alert">
+            Minimum order limit requirement: ₹2,000
+        </div>
+        
+        <!-- Target dynamic items list area link -->
+        <div id="cartItemsList"></div>
+
+        <div style="margin: 20px 0; font-size: 17px; font-weight: bold; display: flex; justify-content: space-between; border-top: 2px solid #f1f5f9; padding-top: 16px;">
+            <span>Selected Items Total:</span>
+            <span id="cartTotalValue" style="color: #b38728;">₹0</span>
+        </div>
+
+        <!-- Customer Profiling Data Submission Form Section -->
+        <form id="checkoutDetailsForm" onsubmit="checkoutToWhatsApp(event)" class="customer-form">
+            <div class="form-title">📋 Delivery & Transport Details</div>
+            
+            <div class="form-group">
+                <label for="custName">Customer Full Name *</label>
+                <input type="text" id="custName" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="custPhone">Contact Number *</label>
+                <input type="tel" id="custPhone" required placeholder="e.g., 9876543210">
+            </div>
+
+            <div class="form-grid-row">
+                <div class="form-group">
+                    <label for="custCity">City *</label>
+                    <input type="text" id="custCity" required placeholder="e.g., Hosur">
+                </div>
+                <div class="form-group">
+                    <label for="custState">State *</label>
+                    <input type="text" id="custState" required placeholder="e.g., Tamil Nadu">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="custAddress">Full Delivery Address *</label>
+                <textarea id="custAddress" required placeholder="Enter complete door no., street name, and area pincode"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="transportHub">Preferred Nearest Transport Hub *</label>
+                <select id="transportHub" required>
+                    <option value="" disabled selected>-- Select Nearest Hub Partner --</option>
+                    <option value="MSS Transport (Nearest Hub)">MSS Transport</option>
+                    <option value="A1 Transport (Nearest Hub)">A1 Transport</option>
+                </select>
+                
+                <div class="hub-finder-box">
+                    <a href="https://google.com" target="_blank" class="finder-btn">🔍 Find MSS Hub</a>
+                    <a href="https://google.com" target="_blank" class="finder-btn">🔍 Find A1 Hub</a>
+                </div>
+            </div>
+
+            <!-- Screenshot Prompt Display Text Block -->
+            <div class="payment-alert-box">
+                📸 Please share the screenshot of your payment to confirm your booking through WhatsApp.
+            </div>
+
+            <button type="submit" id="checkoutBtn" class="checkout-btn">Forward Invoice to WhatsApp Checkout 💬</button>
+        </form>
+    </div>
+
+    <script>
+            
+        const WHATSAPP_NUMBER = "919000000000"; // Replace with your real business mobile number
+        const MIN_ORDER_LIMIT = 2000;
+
+        function displayCart() {
+            const listContainer = document.getElementById('cartItemsList');
+            const totalDisplay = document.getElementById('cartTotalValue');
+            const alertBanner = document.getElementById('minOrderAlert');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const detailsForm = document.getElementById('checkoutDetailsForm');
+            
+            let savedCart = JSON.parse(localStorage.getItem('nr_cart')) || {};
+            let total = 0;
+            listContainer.innerHTML = '';
+
+            Object.keys(savedCart).forEach(name => {
+                if (savedCart[name].qty > 0) {
+                    let itemTotal = savedCart[name].qty * savedCart[name].price;
+                    total += itemTotal;
+                    const row = document.createElement('div');
+                    row.className = 'cart-item-row';
+                    row.innerHTML = `<span><strong>${name}</strong> (x${savedCart[name].qty})</span> <span style="font-weight:700;">₹${itemTotal}</span>`;
+                    listContainer.appendChild(row);
+                }
+            });
+
+            if (total === 0) {
+                listContainer.innerHTML = 'Your cart is empty.';
+                detailsForm.style.display = 'none';
+                alertBanner.style.display = 'none';
+            } else {
+                detailsForm.style.display = 'block';
+                if (total >= MIN_ORDER_LIMIT) {
+                    alertBanner.style.display = 'none';
+                    checkoutBtn.disabled = false;
+                } else {
+                    alertBanner.style.display = 'block';
+                    checkoutBtn.disabled = true;
+                }
+            }
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        function checkoutToWhatsApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const city = document.getElementById('custCity').value;
+            const state = document.getElementById('custState').value;
+            const address = document.getElementById('custAddress').value;
+            const hub = document.getElementById('transportHub').value;
+
+            let savedCart = JSON.parse(localStorage.getItem('nr_cart')) || {};
+            let total = 0;
+
+            let message = "=========================\n";
+            message += "📦 *NR TRADERS - ORDER INVOICE* 📦\n";
+            message += "=========================\n\n";
+            message += "👤 *CUSTOMER PROFILE*\n";
+            message += `• *Name:* ${name}\n`;
+            message += `• *Contact:* ${phone}\n`;
+            message += `• *Destination:* ${city}, ${state}\n`;
+            message += `• *Full Address:* ${address}\n\n`;
+            message += "🚚 *LOGISTICS DISTRIBUTION*\n";
+            message += `• *Selected Hub:* ${hub}\n`;
+            message += "• *Terms:* Self-collection from branch\n\n";
+            message += "-----------------------------------------\n";
+            message += "🛒 *ORDERED FIREWORKS ITEMS*\n";
+            message += "-----------------------------------------\n";
+
+            Object.keys(savedCart).forEach(productName => {
+                if (savedCart[productName].qty > 0) {
+                    let itemTotal = savedCart[productName].qty * savedCart[productName].price;
+                    total += itemTotal;
+                    message += `🔹 *${productName}*\n   Qty: ${savedCart[productName].qty}  |  Total: ₹${itemTotal}\n\n`;
+                }
+            });
+
+            message += "-----------------------------------------\n";
+            message += `💰 *NET PAYABLE AMOUNT:* ₹${total}\n`;
+            message += "-----------------------------------------\n\n";
+            message += "📸 *NEXT STEP:*\n";
+            message += "_Please attach your payment screenshot below this text to confirm your booking!_";
+
+            const encodedText = encodeURIComponent(message);
+            window.open(`https://wa.me{WHATSAPP_NUMBER}?text=${encodedText}`, '_blank');
+        }
+
+        displayCart();
+    </script>
+</body>
+</html>
+

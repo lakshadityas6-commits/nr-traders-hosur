@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN PORTAL - NR TRADERS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dash-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eeeeee; padding-bottom: 20px; margin-bottom: 30px; }
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .dash-card { background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .dash-card h3 { font-size: 18px; color: #1e293b; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+        .btn-danger { background: #ef4444; color: white; padding: 8px 16px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .btn-secondary { background: #64748b; color: white; padding: 10px 14px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Security Route Guard Script -->
+    <script>
+        if (localStorage.getItem('nr_admin_auth') !== 'true') {
+            window.location.href = 'login.html'; // Kicks unauthorized users back to login
+        }
+    </script>
+
+    <div class="dash-container">
+        <div class="dash-header">
+            <div>
+                <h1 style="color: #b38728; font-weight: 800; font-size: 28px;">NR TRADERS CONTROL SYSTEM</h1>
+                <p style="color: #64748b; font-size: 14px;">Operational Site Console Panel</p>
+            </div>
+            <button onclick="handleLogout()" class="btn-danger">Secure Logout</button>
+        </div>
+
+        <div class="dash-grid">
+            <!-- Panel 1: Price List Overview (Button Removed) -->
+            <div class="dash-card">
+                <h3>🏷️ Festive Pricing Control</h3>
+                <p style="font-size:14px; color:#64748b; margin-bottom: 15px;">Active configuration for price tags across your Gift Box and Retail product cards.</p>
+                <div class="form-group">
+                    <label style="font-size:12px; font-weight:700;">VIP Pack (70 Items) Price Status</label>
+                    <input type="text" value="Contact for Price" readonly style="width:100%; padding:10px; border:1px solid #e2e8f0; background-color: #f8fafc; border-radius:8px; margin-top:4px; color: #475569; font-weight: 600;">
+                </div>
+            </div>
+
+            <!-- Panel 2: Live WhatsApp Link Metrics -->
+            <div class="dash-card">
+                <h3>💬 WhatsApp Order Routing</h3>
+                <p style="font-size:14px; color:#64748b; margin-bottom: 15px;">Active configuration for customer order tracking lines.</p>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 13px; color: #334155; margin-bottom: 10px;">
+                    <strong>Primary Line:</strong> +91 97879 07083
+                </div>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 13px; color: #334155;">
+                    <strong>Status:</strong> Connected & Routing Orders
+                </div>
+                <button class="btn-secondary" onclick="window.open('https://wa.me')">Test Main Line Connection</button>
+            </div>
+
+            <!-- Panel 3: Quick Enquiry Leads Tracker -->
+            <div class="dash-card">
+                <h3>⚡ Active Booking Enquiries</h3>
+                <p style="font-size:14px; color:#64748b; margin-bottom: 15px;">Real-time interaction tracker logs for the 90% OFF module.</p>
+                <div style="border-left: 3px solid #25d366; padding-left: 10px; margin-bottom: 12px;">
+                    <div style="font-size: 13px; font-weight: 700;">New Bulk Lead Checked</div>
+                    <div style="font-size: 11px; color:#64748b;">Awaiting verification via WhatsApp routing...</div>
+                </div>
+                <div style="font-size: 12px; text-align: center; color: #94a3b8; padding: 10px 0;">No pending connection breaks logged.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleLogout() {
+            localStorage.removeItem('nr_admin_auth'); // Wipes token security session
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

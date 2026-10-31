@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTACT US - NR TRADERS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <nav>
+            <img src="images/logo.jpg" class="logo" alt="Logo">
+            <div class="brand-title">NR TRADERS</div>
+            <ul>
+                <li><a href="about.html">ABOUT US</a></li>
+                <li><a href="giftbox.html">GIFT BOX</a></li>
+                <li><a href="retail.html">RETAIL</a></li>
+                <li><a href="contact.html" class="active">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content-section">
+        <h2>Get In Touch</h2>
+        <p>Have a custom bulk request or want to place a custom booking order? Drop us a query note below or visit us directly in Hosur!</p>
+        
+        <form class="contact-form" action="#" method="POST">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Enter your contact number">
+            </div>
+            <div class="form-group">
+                <label for="message">Your Requirements</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Describe what items you need..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Booking Query</button>
+        </form>
+    </div>
+
+    <!-- FLOATING ACTIONS -->
+    <a href="https://wa.me!" class="whatsapp-float" target="_blank">💬 WhatsApp</a>
+    <a href="contact.html" class="enquiry-float">🔥 QUICK ENQUIRY (90% OFF)</a>
+    <a href="giftbox.html" class="cart-float">🛒 VIEW CART</a>
+
+</body>
+</html>
