@@ -1,6 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETAIL - NR TRADERS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #ffffff; color: #333333; }
+
+        /* Floating buttons */
+        .premium-float-btn {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999999;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 26px;
+            border: none;
+        }
+        .wa-float-circle-left { left: 25px; bottom: 25px; background: #25D366; }
+        .call-float-circle { right: 25px; bottom: 100px; background: #ef4444; }
+        .cart-float-circle { right: 25px; bottom: 25px; background: #1e293b; border: 2px solid #b38728; }
+        .cart-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #b38728;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1e293b;
+            padding: 0 4px;
+        }
+
+        /* Heading */
+        .content-section { max-width: 900px; margin: 30px auto 20px; padding: 0 15px; text-align: center; }
+        .content-section h2 { font-size: 2rem; color: #1e293b; text-transform: uppercase; margin-bottom: 12px; }
+        .content-section p { font-size: 1rem; line-height: 1.6; color: #555555; }
+
+        /* Search */
+        .search-container { max-width: 500px; margin: 0 auto 20px; padding: 0 15px; }
+        .search-input { width: 100%; padding: 12px 18px; border: 2px solid #cbd5e1; border-radius: 25px; font-size: 15px; outline: none; }
+        .search-input:focus { border-color: #b38728; }
+
+        /* Category buttons */
+        .categories-container { max-width: 800px; margin: 0 auto 30px; padding: 0 15px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .category-btn { background: #ffffff; color: #555555; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; font-weight: 600; }
+        .category-btn:hover, .category-btn.active { background: #b38728; color: #ffffff; border-color: #b38728; }
+
+        /* Product cards */
+        .dual-card-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 0 15px 40px; max-width: 1100px; margin: 0 auto; }
+        .product-card { width: 300px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        .card-details { padding: 15px; text-align: center; }
+        .card-details h3 { font-size: 1.1rem; color: #1e293b; margin-bottom: 8px; }
+        .price { font-size: 1.2rem; font-weight: bold; color: #b38728; margin-bottom: 6px; }
+        .stock-tag { display: inline-block; font-size: 0.9rem; font-weight: bold; color: #15803d; background: #dcfce7; padding: 4px 12px; border-radius: 20px; margin-bottom: 4px; }
+
+        /* Quantity picker */
+        .quantity-picker { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 5px; background: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .qty-btn { background: #ffffff; border: 1px solid #cbd5e1; width: 32px; height: 32px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .qty-btn:hover { background: #b38728; color: #ffffff; border-color: #b38728; }
+        .qty-number { font-size: 16px; font-weight: 700; color: #1e293b; min-width: 24px; text-align: center; }
+
+        /* Empty state */
+        .no-results { display: none; text-align: center; color: #555555; font-size: 1rem; padding: 30px 15px 40px; }
+
+        footer { text-align: center; padding: 20px; background: #1e293b; color: #cbd5e1; font-size: 14px; margin-top: 20px; }
+
+        @media (max-width: 600px) {
+            .content-section h2 { font-size: 1.5rem; }
+            .product-card { width: 100%; max-width: 360px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <nav>
+            <img src="images/logo.jpg" class="logo" alt="NR Traders logo">
+            <div class="brand-title">NR TRADERS</div>
+            <ul>
+                <li><a href="about.html">ABOUT US</a></li>
+                <li><a href="giftbox.html">GIFT BOX</a></li>
+                <li><a href="retail.html" class="active">RETAIL</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content-section">
+        <h2>Retail Counter Selection</h2>
+        <p>Search or filter by category, choose quantities, then tap the cart button to review your order.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-container">
+        <input type="text" id="productSearch" class="search-input" placeholder="Search crackers (e.g., Sparklers, Aerial)..." oninput="applyFilters()">
+    </div>
+
+    <!-- Category buttons -->
+    <div class="categories-container">
+        <button class="category-btn active" data-category="all" onclick="setCategory(this)">All Products</button>
+        <button class="category-btn" data-category="sparklers" onclick="setCategory(this)">Sparklers</button>
+        <button class="category-btn" data-category="aerial" onclick="setCategory(this)">Aerial Fancy</button>
+        <button class="category-btn" data-category="chakkars" onclick="setCategory(this)">Ground Chakkars</button>
+        <button class="category-btn" data-category="rockets" onclick="setCategory(this)">Rockets</button>
+    </div>
+
+    <!-- Products (change data-price to your real rate) -->
+    <div class="dual-card-container" id="productGrid">
+
+        <div class="product-card" data-category="sparklers" data-name="premium sparklers pack" data-price="250">
+            <img src="images/retail1.jpg" alt="Premium Sparklers Pack">
+            <div class="card-details">
+                <h3>PREMIUM SPARKLERS PACK</h3>
+                <p class="price">₹250</p>
+                <span class="stock-tag">In Stock</span>
+                <div class="quantity-picker">
+                    <button class="qty-btn" onclick="adjustQty(this, -1)">-</button>
+                    <span class="qty-number">0</span>
+                    <button class="qty-btn" onclick="adjustQty(this, 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="aerial" data-name="12 shot aerial fancy" data-price="400">
+            <img src="images/retail2.jpg" alt="12 Shot Aerial Fancy">
+            <div class="card-details">
+                <h3>12 SHOT AERIAL FANCY</h3>
+                <p class="price">₹400</p>
+                <span class="stock-tag">In Stock</span>
+                <div class="quantity-picker">
+                    <button class="qty-btn" onclick="adjustQty(this, -1)">-</button>
+                    <span class="qty-number">0</span>
+                    <button class="qty-btn" onclick="adjustQty(this, 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="no-results" id="noResults">No products match your search or category.</p>
+
+    <!-- Floating buttons -->
+    <a href="https://wa.me/919787907083?text=Hi%20NR%20Traders%2C%20I%20want%20to%20enquire%20about%20crackers"
+       class="premium-float-btn wa-float-circle-left" target="_blank" rel="noopener" title="Chat on WhatsApp">
+        <svg style="width:32px; height:32px; fill:#ffffff; display:block;" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.516 2.266 2.27 3.51 5.28 3.505 8.484-.016 6.657-5.353 11.993-11.966 11.993-2.004-.001-3.973-.5-5.72-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.87-9.742.005-2.602-1.005-5.05-2.845-6.89C16.65 2.131 14.2 1.121 11.597 1.121c-5.444 0-9.873 4.372-9.883 9.744-.004 1.739.46 3.435 1.346 4.966l-.995 3.636 3.733-.973zm12.35-4.41c-.27-.135-1.59-.783-1.836-.872-.247-.09-.427-.135-.607.135-.18.27-.697.873-.855 1.057-.157.183-.315.207-.585.072-1.127-.566-1.928-1.01-2.697-2.327-.2-.342.2-.318.572-1.063.06-.12.03-.225-.015-.315-.045-.09-.427-1.03-.585-1.41-.154-.372-.323-.322-.443-.322-.11-.005-.24-.005-.36-.005-.12 0-.315.045-.48.225-.165.18-.63.615-.63 1.502 0 .888.645 1.748.735 1.868.09.12 1.272 1.942 3.082 2.723.43.186.765.297 1.026.38.433.137.828.118 1.14.07.348-.053 1.59-.65 1.815-1.248.225-.597.225-1.11.157-1.215-.067-.105-.247-.15-.517-.285z"/>
+        </svg>
+    </a>
+
+    <a href="tel:+919787907083" class="premium-float-btn call-float-circle" title="Call us">📞</a>
+
+    <a href="cart.html" class="premium-float-btn cart-float-circle" title="View Cart">
+        🛒<span class="cart-count" id="cartCount">0</span>
+    </a>
+
+    <footer>
+        <p>© 2026 NR TRADERS. All Rights Reserved.</p>
+        <p><a href="login.html" style="color:#b38728;">Admin Portal</a></p>
+    </footer>
+
     <script>
-        const WHATSAPP_NUMBER = '919787907083';
-        const CART_KEY = 'nrCart';
+        const CART_KEY = 'nr_cart';
         let activeCategory = 'all';
 
         function getCart() {
@@ -11,30 +188,34 @@
             localStorage.setItem(CART_KEY, JSON.stringify(cart));
         }
 
+        // The product title is used as the cart key
+        function productName(card) {
+            return card.querySelector('h3').textContent.trim();
+        }
+
         // Show saved quantities when the page loads
         function restoreQuantities() {
             const cart = getCart();
             document.querySelectorAll('.product-card').forEach(card => {
-                const item = cart[card.dataset.name];
+                const item = cart[productName(card)];
                 card.querySelector('.qty-number').textContent = item ? item.qty : 0;
             });
             updateCartCount();
         }
 
-        // Quantity -/+ buttons (never below 0), saved for the cart page
+        // Quantity -/+ buttons (never below 0)
         function adjustQty(btn, change) {
             const card = btn.closest('.product-card');
-            const key = card.dataset.name;
+            const name = productName(card);
             const cart = getCart();
-            const newQty = Math.max(0, (cart[key] ? cart[key].qty : 0) + change);
+            const newQty = Math.max(0, (cart[name] ? cart[name].qty : 0) + change);
 
             if (newQty === 0) {
-                delete cart[key];
+                delete cart[name];
             } else {
-                cart[key] = {
-                    title: card.querySelector('h3').textContent,
-                    price: Number(card.dataset.price) || 0,
-                    qty: newQty
+                cart[name] = {
+                    qty: newQty,
+                    price: Number(card.dataset.price) || 0
                 };
             }
 
@@ -59,7 +240,7 @@
             applyFilters();
         }
 
-        // Search and category together
+        // Search and category work together
         function applyFilters() {
             const term = document.getElementById('productSearch').value.toLowerCase().trim();
             let visible = 0;
@@ -74,3 +255,6 @@
 
         restoreQuantities();
     </script>
+
+</body>
+</html>
