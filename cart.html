@@ -2,222 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart - NR TRADERS</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Modern reset to lock all items from breaking outside their boxes */
-        * {
-            box-sizing: border-box !important;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body { 
-            background-color: #f1f5f9; 
-            padding: 16px; 
+        body {
+            background-color: #f1f5f9;
+            padding: 16px;
             font-family: system-ui, -apple-system, sans-serif;
-            overflow-x: hidden; /* Stops any side-to-side scrolling page spills */
+            overflow-x: hidden;
             width: 100%;
         }
 
-        /* Fully contained central container box */
-        .cart-wrapper-box { 
-            max-width: 550px; 
-            margin: 20px auto; 
-            padding: 24px; 
-            background: #ffffff; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        .cart-wrapper-box {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             width: 100%;
-            display: block;
-            clear: both;
         }
-        
-        .back-btn { 
-            display: inline-block; 
-            margin-bottom: 20px; 
-            color: #b38728; 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 15px;
-        }
-        
-        h2 { 
-            margin-top: 0; 
+
+        .back-btn {
+            display: inline-block;
             margin-bottom: 20px;
-            color: #1e293b; 
-            font-weight: 800; 
-            font-size: 22px;
-        }
-
-        /* Policies box context wrapper */
-        .policy-panel { 
-            background: #f8fafc; 
-            border: 1px solid #e2e8f0; 
-            padding: 16px; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-            font-size: 14px; 
-            color: #334155; 
-            line-height: 1.6; 
-            width: 100%;
-        }
-
-        .min-order-alert { 
-            color: #ef4444; 
-            background: #fef2f2; 
-            border: 1px solid #fee2e2; 
-            padding: 12px; 
-            border-radius: 6px; 
-            margin-bottom: 20px; 
-            font-weight: 700; 
-            font-size: 14px; 
-            text-align: center; 
-            width: 100%;
-        }
-
-        /* Cart layout listing rows configuration */
-        .cart-item-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 12px 0; 
-            border-bottom: 1px solid #f1f5f9; 
-            width: 100%;
+            color: #b38728;
+            text-decoration: none;
+            font-weight: bold;
             font-size: 15px;
         }
-        
-        /* Interactive client checkout fields structure */
-        .customer-form { 
-            margin-top: 30px; 
-            padding-top: 20px; 
-            border-top: 2px solid #f1f5f9; 
+
+        h2 { margin-bottom: 20px; color: #1e293b; font-weight: 800; font-size: 22px; }
+
+        .policy-panel {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .min-order-alert {
+            color: #ef4444;
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 15px;
+        }
+        .item-info { flex: 1; }
+        .item-price { font-size: 13px; color: #64748b; margin-top: 3px; }
+        .item-controls { display: flex; align-items: center; gap: 8px; }
+        .qty-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .qty-btn:hover { background: #b38728; color: #ffffff; border-color: #b38728; }
+        .item-qty { min-width: 22px; text-align: center; font-weight: 700; }
+        .item-total { font-weight: 700; min-width: 80px; text-align: right; }
+        .remove-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 18px; }
+
+        .cart-total {
+            margin: 20px 0;
+            font-size: 17px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            border-top: 2px solid #f1f5f9;
+            padding-top: 16px;
+        }
+
+        .customer-form {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f1f5f9;
+        }
+        .form-title { font-size: 18px; color: #1e293b; font-weight: 700; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 14px; font-weight: 600; color: #475569; }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
             width: 100%;
-        }
-        
-        .form-title { 
-            font-size: 18px; 
-            color: #1e293b; 
-            font-weight: 700; 
-            margin-bottom: 16px; 
-        }
-        
-        .form-group { 
-            margin-bottom: 16px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-            width: 100%;
-        }
-        
-        .form-group label { 
-            font-size: 14px; 
-            font-weight: 600; 
-            color: #475569; 
-        }
-        
-        /* Input elements styled securely to never widen past 100% wrapper boundaries */
-        .form-group input, 
-        .form-group textarea, 
-        .form-group select { 
-            padding: 12px; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 6px; 
-            font-size: 14px; 
-            width: 100% !important; 
-            max-width: 100% !important;
             background: #ffffff;
             color: #1e293b;
+            font-family: inherit;
         }
-        
-        .form-group textarea { 
-            resize: none; 
-            min-height: 80px; 
-        }
-        
-        /* Splitting grids setup safely for clean horizontal balance fields stack */
-        .form-grid-row { 
-            display: flex; 
-            gap: 12px; 
-            width: 100%;
-        }
-        
-        .form-grid-row .form-group {
-            flex: 1;
-        }
-        
-        .hub-finder-box { 
-            display: flex; 
-            gap: 8px; 
-            margin-top: 8px; 
-            width: 100%; 
-        }
-        
-        .finder-btn { 
-            background: #f1f5f9; 
-            color: #475569; 
-            border: 1px solid #cbd5e1; 
-            padding: 8px 10px; 
-            font-size: 11px; 
-            font-weight: 600; 
-            border-radius: 4px; 
-            text-decoration: none; 
-            text-align: center; 
-            flex: 1;
-        }
-        
-        .finder-btn:hover { 
-            background: #e2e8f0; 
-            color: #1e293b; 
-        }
+        .form-group textarea { resize: none; min-height: 80px; }
+        .form-grid-row { display: flex; gap: 12px; }
+        .form-grid-row .form-group { flex: 1; }
 
-        .payment-alert-box { 
-            background-color: #fffbeb; 
-            border: 1px dashed #b38728; 
-            padding: 12px; 
-            border-radius: 6px; 
-            margin: 20px 0; 
-            color: #92400e; 
-            font-size: 13px; 
-            font-weight: 600; 
-            text-align: center; 
-            width: 100%;
+        .hub-finder-box { display: flex; gap: 8px; margin-top: 8px; }
+        .finder-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+        .finder-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+        .payment-alert-box {
+            background-color: #fffbeb;
+            border: 1px dashed #b38728;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: #92400e;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
             line-height: 1.4;
         }
 
-        .checkout-btn { 
-            background: #25D366; 
-            color: white; 
-            border: none; 
-            padding: 14px; 
-            width: 100%; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border-radius: 6px; 
-            font-size: 16px; 
-            transition: background 0.2s; 
+        .btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #ffffff;
+            margin-top: 10px;
         }
-        
+        .btn-invoice { background: #1e293b; }
+        .btn-invoice:hover { background: #b38728; }
+        .checkout-btn { background: #25D366; }
         .checkout-btn:hover { background: #1ebd58; }
-        .checkout-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+        .btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
 
-        /* Mobile specific break overrides to handle ultra small viewports */
-        @media (max-width: 480px) { 
+        .empty-msg { text-align: center; color: #64748b; padding: 20px 0; }
+
+        @media (max-width: 480px) {
             body { padding: 10px; }
             .cart-wrapper-box { padding: 16px; margin: 10px auto; }
             .form-grid-row { flex-direction: column; gap: 0; }
+            .item-total { min-width: 60px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
     <div class="cart-wrapper-box">
-        <a href="index.html" class="back-btn">← Continue Shopping</a>
-        
+        <a href="retail.html" class="back-btn">← Continue Shopping</a>
+
         <h2>🛒 Your Selection Cart</h2>
 
-        <!-- Policy Panel Display Box -->
         <div class="policy-panel">
             <strong>📌 ORDER & SHIPPING POLICIES:</strong><br>
             • <strong>No COD available.</strong> Full payment confirmation required.<br>
@@ -225,23 +188,20 @@
             • <strong>Logistics Partners:</strong> Shipped via <strong>MSS</strong> or <strong>A1 Transport</strong>.
         </div>
 
-        <!-- Live Minimum Order Checker Box -->
         <div id="minOrderAlert" class="min-order-alert">
             Minimum order limit requirement: ₹2,000
         </div>
-        
-        <!-- Target dynamic items list area link -->
+
         <div id="cartItemsList"></div>
 
-        <div style="margin: 20px 0; font-size: 17px; font-weight: bold; display: flex; justify-content: space-between; border-top: 2px solid #f1f5f9; padding-top: 16px;">
+        <div class="cart-total" id="cartTotalBox">
             <span>Selected Items Total:</span>
-            <span id="cartTotalValue" style="color: #b38728;">₹0</span>
+            <span id="cartTotalValue" style="color:#b38728;">₹0</span>
         </div>
 
-        <!-- Customer Profiling Data Submission Form Section -->
         <form id="checkoutDetailsForm" onsubmit="checkoutToWhatsApp(event)" class="customer-form">
             <div class="form-title">📋 Delivery & Transport Details</div>
-            
+
             <div class="form-group">
                 <label for="custName">Customer Full Name *</label>
                 <input type="text" id="custName" required placeholder="Enter your full name">
@@ -275,99 +235,240 @@
                     <option value="MSS Transport (Nearest Hub)">MSS Transport</option>
                     <option value="A1 Transport (Nearest Hub)">A1 Transport</option>
                 </select>
-                
+
                 <div class="hub-finder-box">
-                    <a href="https://google.com" target="_blank" class="finder-btn">🔍 Find MSS Hub</a>
-                    <a href="https://google.com" target="_blank" class="finder-btn">🔍 Find A1 Hub</a>
+                    <a href="https://www.google.com/search?q=MSS+Transport+Hosur" target="_blank" rel="noopener" class="finder-btn">🔍 Find MSS Hub</a>
+                    <a href="https://www.google.com/search?q=A1+Transport+Hosur" target="_blank" rel="noopener" class="finder-btn">🔍 Find A1 Hub</a>
                 </div>
             </div>
 
-            <!-- Screenshot Prompt Display Text Block -->
             <div class="payment-alert-box">
                 📸 Please share the screenshot of your payment to confirm your booking through WhatsApp.
             </div>
 
-            <button type="submit" id="checkoutBtn" class="checkout-btn">Forward Invoice to WhatsApp Checkout 💬</button>
+            <button type="button" id="invoiceBtn" class="btn btn-invoice" onclick="downloadInvoice()">Download Invoice (PDF)</button>
+            <button type="submit" id="checkoutBtn" class="btn checkout-btn">Forward Invoice to WhatsApp Checkout 💬</button>
         </form>
     </div>
 
     <script>
-            
-        const WHATSAPP_NUMBER = "919000000000"; // Replace with your real business mobile number
+        const WHATSAPP_NUMBER = "919787907083";
         const MIN_ORDER_LIMIT = 2000;
+        const CART_KEY = "nr_cart";
+
+        function getCart() {
+            try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }
+            catch (e) { return {}; }
+        }
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        }
+
+        // Build a clean list of items that have qty > 0
+        function getItems() {
+            const cart = getCart();
+            return Object.keys(cart)
+                .filter(name => cart[name].qty > 0)
+                .map(name => ({
+                    name: name,
+                    qty: cart[name].qty,
+                    price: Number(cart[name].price) || 0
+                }));
+        }
+
+        function getTotal(items) {
+            return items.reduce((sum, item) => sum + item.qty * item.price, 0);
+        }
+
+        // Change quantity from the cart page
+        function changeQty(name, change) {
+            const cart = getCart();
+            if (!cart[name]) return;
+            cart[name].qty = Math.max(0, cart[name].qty + change);
+            if (cart[name].qty === 0) delete cart[name];
+            saveCart(cart);
+            displayCart();
+        }
+
+        function removeItem(name) {
+            const cart = getCart();
+            delete cart[name];
+            saveCart(cart);
+            displayCart();
+        }
 
         function displayCart() {
             const listContainer = document.getElementById('cartItemsList');
             const totalDisplay = document.getElementById('cartTotalValue');
             const alertBanner = document.getElementById('minOrderAlert');
             const checkoutBtn = document.getElementById('checkoutBtn');
+            const invoiceBtn = document.getElementById('invoiceBtn');
             const detailsForm = document.getElementById('checkoutDetailsForm');
-            
-            let savedCart = JSON.parse(localStorage.getItem('nr_cart')) || {};
-            let total = 0;
+            const totalBox = document.getElementById('cartTotalBox');
+
+            const items = getItems();
+            const total = getTotal(items);
+
             listContainer.innerHTML = '';
 
-            Object.keys(savedCart).forEach(name => {
-                if (savedCart[name].qty > 0) {
-                    let itemTotal = savedCart[name].qty * savedCart[name].price;
-                    total += itemTotal;
-                    const row = document.createElement('div');
-                    row.className = 'cart-item-row';
-                    row.innerHTML = `<span><strong>${name}</strong> (x${savedCart[name].qty})</span> <span style="font-weight:700;">₹${itemTotal}</span>`;
-                    listContainer.appendChild(row);
-                }
-            });
-
-            if (total === 0) {
-                listContainer.innerHTML = 'Your cart is empty.';
+            if (items.length === 0) {
+                listContainer.innerHTML = '<p class="empty-msg">Your cart is empty.<br><a href="retail.html" style="color:#b38728;">Go to Retail to add items</a></p>';
                 detailsForm.style.display = 'none';
                 alertBanner.style.display = 'none';
-            } else {
-                detailsForm.style.display = 'block';
-                if (total >= MIN_ORDER_LIMIT) {
-                    alertBanner.style.display = 'none';
-                    checkoutBtn.disabled = false;
-                } else {
-                    alertBanner.style.display = 'block';
-                    checkoutBtn.disabled = true;
-                }
+                totalBox.style.display = 'none';
+                return;
             }
+
+            items.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'cart-item-row';
+                row.innerHTML = `
+                    <div class="item-info">
+                        <strong>${item.name}</strong>
+                        <div class="item-price">₹${item.price} each</div>
+                    </div>
+                    <div class="item-controls">
+                        <button class="qty-btn" data-name="${item.name}" data-change="-1">-</button>
+                        <span class="item-qty">${item.qty}</span>
+                        <button class="qty-btn" data-name="${item.name}" data-change="1">+</button>
+                    </div>
+                    <div class="item-total">₹${item.qty * item.price}</div>
+                    <button class="remove-btn" data-name="${item.name}" data-remove="1" title="Remove">✕</button>
+                `;
+                listContainer.appendChild(row);
+            });
+
+            // Button handling (uses data attributes, so names with quotes are safe)
+            listContainer.querySelectorAll('.qty-btn').forEach(btn => {
+                btn.addEventListener('click', () => changeQty(btn.dataset.name, Number(btn.dataset.change)));
+            });
+            listContainer.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => removeItem(btn.dataset.name));
+            });
+
+            totalBox.style.display = 'flex';
             totalDisplay.innerText = `₹${total}`;
+            detailsForm.style.display = 'block';
+
+            const meetsMinimum = total >= MIN_ORDER_LIMIT;
+            alertBanner.style.display = meetsMinimum ? 'none' : 'block';
+            checkoutBtn.disabled = !meetsMinimum;
+            invoiceBtn.disabled = !meetsMinimum;
         }
 
+        // Check name and phone before creating an invoice or order
+        function getCustomerDetails() {
+            const form = document.getElementById('checkoutDetailsForm');
+            if (!form.reportValidity()) return null;
+            return {
+                name: document.getElementById('custName').value.trim(),
+                phone: document.getElementById('custPhone').value.trim(),
+                city: document.getElementById('custCity').value.trim(),
+                state: document.getElementById('custState').value.trim(),
+                address: document.getElementById('custAddress').value.trim(),
+                hub: document.getElementById('transportHub').value
+            };
+        }
+
+        // PDF invoice (uses "Rs." because the default PDF font can't show ₹)
+        function downloadInvoice() {
+            const customer = getCustomerDetails();
+            if (!customer) return;
+            const items = getItems();
+            const total = getTotal(items);
+            if (items.length === 0 || total < MIN_ORDER_LIMIT) return;
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const invNo = 'NRT-' + Date.now().toString().slice(-6);
+            const date = new Date().toLocaleDateString('en-IN');
+            const money = n => 'Rs. ' + n.toLocaleString('en-IN');
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.text('NR TRADERS', 14, 20);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text('Hosur, Tamil Nadu  |  Phone: +91 97879 07083', 14, 27);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(14);
+            doc.text('INVOICE', 150, 20);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text('Invoice No: ' + invNo, 150, 27);
+            doc.text('Date: ' + date, 150, 33);
+
+            doc.line(14, 38, 196, 38);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Bill To:', 14, 46);
+            doc.setFont('helvetica', 'normal');
+            doc.text(customer.name, 14, 52);
+            doc.text('Phone: ' + customer.phone, 14, 58);
+            const addrLines = doc.splitTextToSize('Address: ' + customer.city + ', ' + customer.state + ' - ' + customer.address, 110);
+            doc.text(addrLines, 14, 64);
+            const afterAddr = 64 + addrLines.length * 5 + 6;
+
+            let y = afterAddr + 10;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Item', 14, y);
+            doc.text('Rate', 120, y, { align: 'right' });
+            doc.text('Qty', 150, y, { align: 'right' });
+            doc.text('Amount', 196, y, { align: 'right' });
+            doc.line(14, y + 2, 196, y + 2);
+
+            doc.setFont('helvetica', 'normal');
+            items.forEach(item => {
+                y += 10;
+                doc.text(doc.splitTextToSize(item.name, 95)[0], 14, y);
+                doc.text(item.price.toLocaleString('en-IN'), 120, y, { align: 'right' });
+                doc.text(String(item.qty), 150, y, { align: 'right' });
+                doc.text((item.qty * item.price).toLocaleString('en-IN'), 196, y, { align: 'right' });
+            });
+
+            y += 6;
+            doc.line(14, y, 196, y);
+            y += 10;
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(12);
+            doc.text('Grand Total: ' + money(total), 196, y, { align: 'right' });
+
+            y += 20;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.text('Delivery: Self-collection from ' + customer.hub + '. No COD. Full payment required.', 14, y);
+            doc.text('Thank you for choosing NR Traders.', 14, y + 6);
+
+            doc.save(invNo + '.pdf');
+        }
+
+        // Send the order to WhatsApp
         function checkoutToWhatsApp(event) {
             event.preventDefault();
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const city = document.getElementById('custCity').value;
-            const state = document.getElementById('custState').value;
-            const address = document.getElementById('custAddress').value;
-            const hub = document.getElementById('transportHub').value;
-
-            let savedCart = JSON.parse(localStorage.getItem('nr_cart')) || {};
-            let total = 0;
+            const customer = getCustomerDetails();
+            if (!customer) return;
+            const items = getItems();
+            const total = getTotal(items);
+            if (items.length === 0 || total < MIN_ORDER_LIMIT) return;
 
             let message = "=========================\n";
             message += "📦 *NR TRADERS - ORDER INVOICE* 📦\n";
             message += "=========================\n\n";
             message += "👤 *CUSTOMER PROFILE*\n";
-            message += `• *Name:* ${name}\n`;
-            message += `• *Contact:* ${phone}\n`;
-            message += `• *Destination:* ${city}, ${state}\n`;
-            message += `• *Full Address:* ${address}\n\n`;
+            message += `• *Name:* ${customer.name}\n`;
+            message += `• *Contact:* ${customer.phone}\n`;
+            message += `• *Destination:* ${customer.city}, ${customer.state}\n`;
+            message += `• *Full Address:* ${customer.address}\n\n`;
             message += "🚚 *LOGISTICS DISTRIBUTION*\n";
-            message += `• *Selected Hub:* ${hub}\n`;
+            message += `• *Selected Hub:* ${customer.hub}\n`;
             message += "• *Terms:* Self-collection from branch\n\n";
             message += "-----------------------------------------\n";
             message += "🛒 *ORDERED FIREWORKS ITEMS*\n";
             message += "-----------------------------------------\n";
 
-            Object.keys(savedCart).forEach(productName => {
-                if (savedCart[productName].qty > 0) {
-                    let itemTotal = savedCart[productName].qty * savedCart[productName].price;
-                    total += itemTotal;
-                    message += `🔹 *${productName}*\n   Qty: ${savedCart[productName].qty}  |  Total: ₹${itemTotal}\n\n`;
-                }
+            items.forEach(item => {
+                message += `🔹 *${item.name}*\n   Qty: ${item.qty}  |  Total: ₹${item.qty * item.price}\n\n`;
             });
 
             message += "-----------------------------------------\n";
@@ -376,12 +477,10 @@
             message += "📸 *NEXT STEP:*\n";
             message += "_Please attach your payment screenshot below this text to confirm your booking!_";
 
-            const encodedText = encodeURIComponent(message);
-            window.open(`https://wa.me{WHATSAPP_NUMBER}?text=${encodedText}`, '_blank');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
         displayCart();
     </script>
 </body>
 </html>
-
